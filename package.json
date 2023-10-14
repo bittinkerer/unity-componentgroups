@@ -1,0 +1,20 @@
+{
+  "name": "com.estenis.componentgroups",
+  "version": "0.0.1",
+  "displayName": "Unity Component Groups",
+  "description": "Allows grouping of GameObject Components",
+  "unity": "2019.1",
+  "unityRelease": "0b5",  
+  "dependencies": {
+    
+  },
+  "keywords": [
+    "component group",
+    "group"
+  ],
+  "author": {
+    "name": "Ernesto Pavon",
+    "email": "bittinkerer@gmail.com",
+    "url": "https://github.com/bittinkerer"
+  }
+}
