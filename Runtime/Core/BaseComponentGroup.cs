@@ -4,6 +4,9 @@ namespace Packages.Estenis.ComponentGroups_
 {
     public class BaseComponentGroup : MonoBehaviour
     {
-
+        public BaseComponentGroup()
+        {
+            
+        }
     }
 }

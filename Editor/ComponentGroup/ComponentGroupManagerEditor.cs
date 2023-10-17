@@ -29,6 +29,8 @@ namespace Packages.Estenis.ComponentGroupsEditor_
         private void OnAddGroup(ClickEvent evt)
         {
             UnityEngine.Debug.Log("Clicked Add Group!!");
+            // Get text field value 
+            ((ComponentGroupManager)target).AddGroup("test_1");
         }
     }
 }
