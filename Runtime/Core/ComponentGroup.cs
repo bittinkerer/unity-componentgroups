@@ -10,7 +10,7 @@ namespace Packages.Estenis.ComponentGroups_
     {
         [SerializeField] public bool _focus;
         [SerializeField] private string _typeName = "ComponentGroup";
-        [SerializeField] public List<ComponentData> _components = new();
+        [SerializeField] public List<ComponentData> _components ;
 
         
 
@@ -26,7 +26,7 @@ namespace Packages.Estenis.ComponentGroups_
     [Serializable]
     public class ComponentData
     {
-        public Component _component;
+        [SerializeField] public Component _component;
         
     }
 
