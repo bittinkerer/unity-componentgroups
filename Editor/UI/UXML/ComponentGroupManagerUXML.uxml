@@ -1,8 +1,17 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
     <Style src="project://database/Packages/com.estenis.componentgroups/Editor/UI/Styles/ComponentGroupManagerSS.uss?fileID=7433441132597879392&amp;guid=800386df7ecb4a747bd070caf1826536&amp;type=3#ComponentGroupManagerSS" />
+    
     <ui:VisualElement class="group-row" style="width: 100%;">
-        <ui:TextField picking-mode="Ignore" label="Add Group" style="width: 90%; display: flex;" />
+        <ui:TextField name="group-name" picking-mode="Ignore" label="Add Group" style="width: 90%; display: flex;" />
         <ui:Button text="+" parse-escape-sequences="true" display-tooltip-when-elided="true" name="AddGroupButton" />
     </ui:VisualElement>
+	<ui:ListView virtualization-method="DynamicHeight"
+              reorder-mode="Animated"
+              binding-path="_groups"
+              show-add-remove-footer="true"
+              show-border="true"
+              show-foldout-header="true"
+              header-title="Groups"
+    />
     <ui:VisualElement style="flex-grow: 1;" />
 </ui:UXML>

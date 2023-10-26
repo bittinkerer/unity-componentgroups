@@ -1,0 +1,6 @@
+<UXML xmlns="UnityEngine.UIElements" xmlns:ue="UnityEditor.UIElements">
+    <u:Box style="flex-direction: row;">
+        <u:Button text="Detach"/>
+        <u:PropertyField binding-path="_component" readonly="true" style="flex-grow: 1;"/>
+    </u:Box>
+</UXML>

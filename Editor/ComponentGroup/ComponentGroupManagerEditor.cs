@@ -15,6 +15,10 @@ namespace Packages.Estenis.ComponentGroupsEditor_
 
         public override VisualElement CreateInspectorGUI()
         {
+            if(_inspectorXML == null )
+            {
+                return base.CreateInspectorGUI();
+            }
             _root = new VisualElement(); 
             // Load and clone a visual tree from UXML
             _inspectorXML.CloneTree(_root); 

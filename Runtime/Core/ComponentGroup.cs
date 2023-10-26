@@ -1,4 +1,6 @@
+
 using Packages.Estenis.UnityExts_;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,24 +8,12 @@ namespace Packages.Estenis.ComponentGroups_
 {
     public class ComponentGroup : MonoBehaviour, ITypeNameProvider
     {
+        [SerializeField] public bool _focus;
         [SerializeField] private string _typeName = "ComponentGroup";
-        public ObservableList<Component> _components = new ();
+        [SerializeField] public List<ComponentData> _components = new();
 
-        public ComponentGroup()
-        {
-            _components.CollectionChanged += _components_CollectionChanged;
-        }
+        
 
-        private void Start()
-        {
-            
-        }
-
-        private void _components_CollectionChanged(
-            object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            Debug.Log($"Collection has changed. {e.Action}");
-        }
 
         public void SetTypeName(string typeName)
         {
@@ -32,4 +22,12 @@ namespace Packages.Estenis.ComponentGroups_
 
         public string TypeName => _typeName;
     }
+
+    [Serializable]
+    public class ComponentData
+    {
+        public Component _component;
+        
+    }
+
 }
