@@ -1,4 +1,5 @@
 using Packages.Estenis.ComponentGroups_;
+using Packages.Estenis.UnityExts_;
 using System;
 using System.Linq;
 using System.Net.NetworkInformation;
@@ -26,9 +27,20 @@ namespace Packages.Estenis.ComponentGroupsEditor_
             componentObjectField.RegisterValueChangedCallback(OnComponentChanged);
 
             // Set up groups
-            var groupsListView = root.Q<ListView>();            
-            groupsListView.makeItem = _componentAsset.CloneTree;
-            
+            var groupsListView = root.Q<ListView>();
+            //groupsListView.makeItem = _componentAsset.CloneTree;
+            groupsListView.makeItem = () =>
+            {
+                var tc = _componentAsset.Instantiate();
+                tc.Q<ObjectField>().RegisterValueChangedCallback(evt =>
+                {
+                    var component = (Component)evt.newValue;
+                    component.HideInInspector();
+                    Debug.Log("Is this working or what..");
+                });
+                return tc;
+            };
+
             groupsListView.bindItem += OnGroupsItemBound;
             groupsListView.unbindItem += OnGroupsItemUnBound;
             groupsListView.itemsAdded += GroupsListView_itemsAdded;
@@ -68,9 +80,18 @@ namespace Packages.Estenis.ComponentGroupsEditor_
         {
             Debug.Log($"Groups item added:  {string.Join(',', addedItems.ToArray())}");
             _componentTemplate.Query<ObjectField>()
-                .ForEach(of => of.RegisterValueChangedCallback(OnComponentChanged));
+                .ForEach(of =>
+                {
+                    of.RegisterValueChangedCallback(OnComponentChanged);
+                    of.RegisterCallback<ChangeEvent<ObjectField>>(OnComponentAChange);
+                });
             var foo = _componentTemplate.Query<ObjectField>();
             //last.RegisterValueChangedCallback(OnComponentChanged);
+        }
+
+        private void OnComponentAChange(ChangeEvent<ObjectField> evt)
+        {
+            Debug.Log("COMOI");
         }
 
         private void OnGroupsItemBound(VisualElement element, int index)
