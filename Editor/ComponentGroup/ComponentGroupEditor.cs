@@ -27,23 +27,24 @@ namespace Packages.Estenis.ComponentGroupsEditor_
             // Set up groups
             var groupsListView = root.Q<ListView>();
             groupsListView.itemsSource = Target._components;
-            //groupsListView.makeItem = _componentAsset.CloneTree;
+            
             groupsListView.makeItem = () =>
             {
                 var tc = _componentAsset.Instantiate();
                 var componentField = tc.Q<ObjectField>();
-                // componentField.value is Component type and binds to _component of a ComponentData type
-                Target._components[Target._components.Count - 1] = (componentField.value as SerializedProperty);
-
+                
+                int index = Target._components.Count - 1;
+                var component = Target._components[Target._components.Count-1];
                 tc.Q<ObjectField>().RegisterValueChangedCallback(evt =>
                 {
                     Debug.Log($"[{Time.time}] Component Changed..");
+                    component._component = (Component)evt.newValue ;
                     // hide assigned component
-                    var component = (Component)evt.newValue;
-                    componentField.value = component;
-                    if (component != null)
+                    //currentComponent._component = (Component)evt.newValue;
+                    
+                    if (component._component != null)
                     {
-                        component.HideInInspector();
+                        //Target._components[index]._component.HideInInspector();
                     }
                     EditorUtility.SetDirty(target);
 
@@ -89,6 +90,10 @@ namespace Packages.Estenis.ComponentGroupsEditor_
         private void GroupsListView_itemsAdded(System.Collections.Generic.IEnumerable<int> addedItems)
         {
             Debug.Log($"[{Time.time}] Groups item added:  {string.Join(',', addedItems.ToArray())}");
+            foreach (var index in addedItems)
+            {
+                Target._components[index] = new ComponentData();
+            }
             //_componentTemplate.Query<ObjectField>()
             //    .ForEach(of =>
             //    {
