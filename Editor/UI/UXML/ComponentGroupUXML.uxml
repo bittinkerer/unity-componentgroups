@@ -2,6 +2,6 @@
     <ui:Label tabindex="-1" text="Name" display-tooltip-when-elided="true" name="name" />
     <ui:Button text="Copy" display-tooltip-when-elided="true" name="copy" />
     <ui:Toggle binding-path="_focus" name="focus" label="Focus" />
-    <ui:ListView virtualization-method="DynamicHeight" reorder-mode="Animated" binding-path="_components" show-add-remove-footer="true" show-border="true" show-foldout-header="true" header-title="Components" name="groups" />
+    <ui:ListView virtualization-method="DynamicHeight" reorder-mode="Animated" binding-path="_components" show-add-remove-footer="true" show-border="true" show-foldout-header="true" header-title="Components" name="groups"  />
     <ui:VisualElement style="flex-grow: 1;" />
 </ui:UXML>
