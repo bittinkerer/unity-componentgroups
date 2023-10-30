@@ -98,8 +98,9 @@ namespace Packages.Estenis.ComponentGroupsEditor_
         {
             Debug.Log($"[{Time.time}] Groups item bound");
             var componentField = element.Q<ObjectField>();
+            componentField.userData = index;    // order matter, this statement needs to happen before assignment of value
             componentField.value = Target._components[index]._component;
-            componentField.userData = index;
+            
         }
 
         private void OnGroupsItemUnBound(VisualElement element, int index)
