@@ -27,31 +27,8 @@ namespace Packages.Estenis.ComponentGroupsEditor_
             // Set up groups
             var groupsListView = root.Q<ListView>();
             groupsListView.itemsSource = Target._components;
-            
-            groupsListView.makeItem = () =>
-            {
-                var tc = _componentAsset.Instantiate();
-                var componentField = tc.Q<ObjectField>();
-                
-                int index = Target._components.Count - 1;
-                var component = Target._components[Target._components.Count-1];
-                tc.Q<ObjectField>().RegisterValueChangedCallback(evt =>
-                {
-                    Debug.Log($"[{Time.time}] Component Changed..");
-                    component._component = (Component)evt.newValue ;
-                    // hide assigned component
-                    //currentComponent._component = (Component)evt.newValue;
-                    
-                    if (component._component != null)
-                    {
-                        //Target._components[index]._component.HideInInspector();
-                    }
-                    EditorUtility.SetDirty(target);
 
-                });
-                return tc;
-            };
-
+            groupsListView.makeItem = MakeItem;
             groupsListView.bindItem += OnGroupsItemBound;
             groupsListView.unbindItem += OnGroupsItemUnBound;
             groupsListView.itemsAdded += GroupsListView_itemsAdded;
@@ -63,8 +40,27 @@ namespace Packages.Estenis.ComponentGroupsEditor_
 
             // Set up focus
 
-
             return root;
+        }
+
+        private TemplateContainer MakeItem()
+        {
+            var tc = _componentAsset.Instantiate();
+            int lastIndex = Target._components.Count - 1;
+            //var componentField = tc.Q<ObjectField>();
+            //componentField.userData ??= Target._components[^1];
+            //ComponentData component = (ComponentData)componentField.userData;
+            var objectField = tc.Q<ObjectField>();
+            tc.Q<ObjectField>().RegisterValueChangedCallback(evt =>
+            {
+                Debug.Log($"[{Time.time}] Component Changed..");
+                int index = objectField?.userData == null 
+                                ? lastIndex
+                                : (objectField.userData as int?).Value;
+                Target._components[index]._component = (Component)evt.newValue;
+                EditorUtility.SetDirty(target);
+            });
+            return tc;
         }
 
         private void OnComponentChanged(ChangeEvent<UnityEngine.Object> evt)
@@ -94,14 +90,6 @@ namespace Packages.Estenis.ComponentGroupsEditor_
             {
                 Target._components[index] = new ComponentData();
             }
-            //_componentTemplate.Query<ObjectField>()
-            //    .ForEach(of =>
-            //    {
-            //        of.RegisterValueChangedCallback(OnComponentChanged);
-            //        of.RegisterCallback<ChangeEvent<ObjectField>>(OnComponentAChange);
-            //    });
-            //var foo = _componentTemplate.Query<ObjectField>();
-            //last.RegisterValueChangedCallback(OnComponentChanged);
         }
 
         //
@@ -111,11 +99,12 @@ namespace Packages.Estenis.ComponentGroupsEditor_
             Debug.Log($"[{Time.time}] Groups item bound");
             var componentField = element.Q<ObjectField>();
             componentField.value = Target._components[index]._component;
+            componentField.userData = index;
         }
 
         private void OnGroupsItemUnBound(VisualElement element, int index)
         {
-            Debug.Log($"[{Time.time}] Groups item unbound");
+            Debug.Log($"[{Time.time}] Groups item Unbound");
         }
 
     }
