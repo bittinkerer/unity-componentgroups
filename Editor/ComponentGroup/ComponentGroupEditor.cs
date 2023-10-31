@@ -57,14 +57,33 @@ namespace Packages.Estenis.ComponentGroupsEditor_
 
             tc.Q<ObjectField>().RegisterValueChangedCallback(evt =>
             {
-                Debug.Log($"[{Time.time}] Component Changed..");
                 int index = objectField?.userData == null 
                                 ? lastIndex
                                 : (objectField.userData as int?).Value;
                 Target._components[index]._component = (Component)evt.newValue;
+                HandleOnComponentRemoved((Component)evt.previousValue);
+                HandleOnComponentAdded(Target._components[index]._component);
                 EditorUtility.SetDirty(target);
             });
             return tc;
+        }
+
+        private void HandleOnComponentRemoved(Component component)
+        {
+            if(component == null)
+            {
+                return;
+            }
+            component.UnhideInInspector();
+        }
+
+        private void HandleOnComponentAdded(Component component)
+        {
+            if (component == null)
+            {
+                return;
+            }
+            component.HideInInspector();
         }
 
         private void OnComponentChanged(ChangeEvent<UnityEngine.Object> evt)
