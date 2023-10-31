@@ -22,6 +22,12 @@ namespace Packages.Estenis.ComponentGroupsEditor_
 
         public override VisualElement CreateInspectorGUI()
         {
+            if (Application.isPlaying)
+            {
+                _editorAsset = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Packages/com.estenis.componentgroups/Editor/UI/UXML/ComponentGroupUXML.uxml");
+                _componentAsset = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Packages/com.estenis.componentgroups/Editor/UI/UXML/ComponentUXML.uxml");
+            }
+
             var root = _editorAsset.Instantiate();
 
             // Set up groups
@@ -45,12 +51,10 @@ namespace Packages.Estenis.ComponentGroupsEditor_
 
         private TemplateContainer MakeItem()
         {
-            var tc = _componentAsset.Instantiate();
-            int lastIndex = Target._components.Count - 1;
-            //var componentField = tc.Q<ObjectField>();
-            //componentField.userData ??= Target._components[^1];
-            //ComponentData component = (ComponentData)componentField.userData;
+            var tc          = _componentAsset.Instantiate();
+            int lastIndex   = Target._components.Count - 1;
             var objectField = tc.Q<ObjectField>();
+
             tc.Q<ObjectField>().RegisterValueChangedCallback(evt =>
             {
                 Debug.Log($"[{Time.time}] Component Changed..");
