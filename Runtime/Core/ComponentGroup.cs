@@ -2,6 +2,7 @@
 using Packages.Estenis.UnityExts_;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using UnityEngine;
 
 namespace Packages.Estenis.ComponentGroups_
@@ -10,7 +11,7 @@ namespace Packages.Estenis.ComponentGroups_
     {
         [SerializeField] public bool _focus;
         [SerializeField] private string _typeName = "ComponentGroup";
-        [SerializeField] public List<ComponentData> _components ;
+        [SerializeField] public List<ComponentData> _components = new();
 
         
 
@@ -24,10 +25,28 @@ namespace Packages.Estenis.ComponentGroups_
     }
 
     [Serializable]
-    public class ComponentData
+    public class ComponentData : IEquatable<ComponentData>, INullable
     {
         [SerializeField] public Component _component;
-        
+
+        public override int GetHashCode()
+        {
+            return _component.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as ComponentData);
+        }
+
+        public bool IsNull => _component == null;
+
+        public bool Equals(ComponentData other)
+        {
+            if (_component == null && other == null) { return true; }
+            if( _component == null || other == null) { return false; }
+            return _component.Equals(other._component);
+        }
     }
 
 }

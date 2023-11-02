@@ -62,12 +62,7 @@ namespace Packages.Estenis.ComponentGroups_
                     getObjectTypeNameMethodInfo);
             return getObjectTypeNameFunc(o, multiObjectEditing);
 
-            if (o is Component && o is ITypeNameProvider nameProvider)
-            {
-                return nameProvider.TypeName ;
-            }
-
-            return getObjectTypeNameFunc(o, multiObjectEditing);
+            
         }
     }
 }

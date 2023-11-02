@@ -1,6 +1,7 @@
 using Packages.Estenis.ComponentGroups_;
 using Packages.Estenis.UnityExts_;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.NetworkInformation;
 using UnityEditor;
@@ -19,9 +20,14 @@ namespace Packages.Estenis.ComponentGroupsEditor_
         public ComponentGroup Target => target as ComponentGroup;
 
         private TemplateContainer _componentTemplate;
+        private List<ComponentData> _componentsCopy = new ();
 
         public override VisualElement CreateInspectorGUI()
         {
+            Debug.Log($"Creating Inspector for {Target.GetType().Name}");
+            _componentsCopy = new(Target._components);
+            EditorApplication.update += OnUpdate;
+
             if (Application.isPlaying)
             {
                 _editorAsset = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Packages/com.estenis.componentgroups/Editor/UI/UXML/ComponentGroupUXML.uxml");
@@ -47,6 +53,35 @@ namespace Packages.Estenis.ComponentGroupsEditor_
             // Set up focus
 
             return root;
+        }
+
+        private void OnUpdate()
+        {
+            Debug.LogWarning($"{nameof(ComponentGroupEditor)}.{nameof(OnUpdate)}");
+            List<ListDifference<ComponentData>> diffs = _componentsCopy.Differences(Target._components);
+            if (diffs.Count == 0)
+            {
+                return;
+            }
+
+            foreach (var diff in diffs)
+            {
+                var component = diff.Item._component;
+                if (diff.ListChangeType == ListChangeType.ADDED)
+                {
+                    HandleOnComponentAdded(component);
+                }
+                else if (diff.ListChangeType == ListChangeType.REMOVED)
+                {
+                    HandleOnComponentRemoved(component);
+                }
+            }
+
+            _componentsCopy = new(Target._components);
+            if (target)
+            {
+                EditorUtility.SetDirty(target);
+            }
         }
 
         private TemplateContainer MakeItem()
@@ -126,9 +161,24 @@ namespace Packages.Estenis.ComponentGroupsEditor_
             
         }
 
+        /// <summary>
+        /// Unbinds element from data
+        /// NOTE: Be-careful, unbinds happens for more than just removal of item from visual element
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="index"></param>
         private void OnGroupsItemUnBound(VisualElement element, int index)
         {
-            Debug.Log($"[{Time.time}] Groups item Unbound");
+            var component = (Component)element.Q<ObjectField>()?.value;
+            if (component)
+            {
+                component.UnhideInInspector();
+                Debug.Log($"[{Time.time}] Groups item Unbound for {component.name}");
+            }
+            else
+            {
+                Debug.Log($"[{Time.time}] Groups item Unbound for null component");
+            }
         }
 
     }
