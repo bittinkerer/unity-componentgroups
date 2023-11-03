@@ -12,9 +12,7 @@ namespace Packages.Estenis.ComponentGroups_
         [SerializeField] public bool _focus;
         [SerializeField] private string _typeName = "ComponentGroup";
         [SerializeField] public List<ComponentData> _components = new();
-
-        
-
+        [SerializeField] [HideInInspector] public List<ComponentData> _componentsCopy = new();
 
         public void SetTypeName(string typeName)
         {

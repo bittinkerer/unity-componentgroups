@@ -4,9 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.NetworkInformation;
+using System.Reflection;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.UIElements;
 
 namespace Packages.Estenis.ComponentGroupsEditor_
@@ -20,12 +22,47 @@ namespace Packages.Estenis.ComponentGroupsEditor_
         public ComponentGroup Target => target as ComponentGroup;
 
         private TemplateContainer _componentTemplate;
-        private List<ComponentData> _componentsCopy = new ();
+        //private List<ComponentData> _componentsCopy = new ();
+
+        private void CreateComponentsInGO(List<ComponentData> components)
+        {
+            foreach (var component in components.Where(co => !co.IsNull))
+            {
+                // create
+                var newComponent = Target.gameObject.AddComponent(component._component.GetType());
+
+                // copy values
+                foreach (var field in newComponent.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public))
+                {
+                    field.SetValue(newComponent, field.GetValue(component._component));
+                }
+
+                foreach (var prop in newComponent.GetType().GetProperties(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public).Where(p => p.Module.Name != "UnityEngine.CoreModule.dll"))
+                {
+                    prop.SetValue(newComponent, prop.GetValue(component._component));
+                }
+
+                // update reference
+                component._component = newComponent;
+            }
+        }
 
         public override VisualElement CreateInspectorGUI()
         {
             Debug.Log($"Creating Inspector for {Target.GetType().Name}");
-            _componentsCopy = new(Target._components);
+
+            // Check if this is a copy-paste from different GO
+            if(Target._components.Count > 0)
+            {
+                var componentsInTargetNotInGO = GetComponentsNotInGO(Target._components);
+                CreateComponentsInGO(componentsInTargetNotInGO);
+            }
+
+            // Keep track of copy for changes detected to components list
+            OnUpdate();
+            //Target._componentsCopy = new(Target._components);
+
+            // Set up update loop
             EditorApplication.update += OnUpdate;
 
             if (Application.isPlaying)
@@ -35,6 +72,10 @@ namespace Packages.Estenis.ComponentGroupsEditor_
             }
 
             var root = _editorAsset.Instantiate();
+
+            // set up event handlers
+            var focusToggle = root.Q<UnityEngine.UIElements.Toggle>("focus");
+            focusToggle.RegisterValueChangedCallback(HandleFocusToggle);
 
             // Set up groups
             var groupsListView = root.Q<ListView>();
@@ -55,32 +96,53 @@ namespace Packages.Estenis.ComponentGroupsEditor_
             return root;
         }
 
+        //
+        // Event Handlers
+        //
+
+        private void HandleFocusToggle(ChangeEvent<bool> changeEvent)
+        {
+            Debug.Log($"Focus toggle updated to {changeEvent.newValue}");
+        }
+
+        private List<ComponentData> GetComponentsNotInGO(List<ComponentData> components) =>
+            components
+                .Where(grcd => !Target.gameObject.GetComponents<Component>().Any(goco => goco == grcd._component)) 
+                .ToList();
+               
+
         private void OnUpdate()
         {
-            Debug.LogWarning($"{nameof(ComponentGroupEditor)}.{nameof(OnUpdate)}");
-            List<ListDifference<ComponentData>> diffs = _componentsCopy.Differences(Target._components);
+            //Debug.LogWarning($"{nameof(ComponentGroupEditor)}.{nameof(OnUpdate)}");
+            List<ListDifference<ComponentData>> diffs = Target._componentsCopy.Differences(Target._components);
             if (diffs.Count == 0)
             {
                 return;
             }
 
+            bool changesMade = false;
             foreach (var diff in diffs)
             {
                 var component = diff.Item._component;
                 if (diff.ListChangeType == ListChangeType.ADDED)
                 {
+                    changesMade = true;
                     HandleOnComponentAdded(component);
                 }
                 else if (diff.ListChangeType == ListChangeType.REMOVED)
                 {
+                    changesMade = true;
                     HandleOnComponentRemoved(component);
                 }
             }
 
-            _componentsCopy = new(Target._components);
-            if (target)
+            if (changesMade)
             {
-                EditorUtility.SetDirty(target);
+                Target._componentsCopy = new(Target._components);
+                if (target)
+                {
+                    EditorUtility.SetDirty(target);
+                }
             }
         }
 
@@ -156,6 +218,16 @@ namespace Packages.Estenis.ComponentGroupsEditor_
         {
             Debug.Log($"[{Time.time}] Groups item bound");
             var componentField = element.Q<ObjectField>();
+
+            if (componentField?.value)
+            {                
+                Debug.Log($"[{Time.time}] Groups item Unbound for {componentField.value.name}");
+            }
+            else
+            {
+                Debug.Log($"[{Time.time}] Groups item Unbound for null component");
+            }
+
             componentField.userData = index;    // order matter, this statement needs to happen before assignment of value
             componentField.value = Target._components[index]._component;
             
