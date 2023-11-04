@@ -20,32 +20,11 @@ namespace Packages.Estenis.ComponentGroupsEditor_
         [SerializeField] private VisualTreeAsset _componentAsset;
 
         public ComponentGroup Target => target as ComponentGroup;
+        private string[] _groupExceptions = { "Transform", "ComponentFilter"};
 
         private TemplateContainer _componentTemplate;
-        //private List<ComponentData> _componentsCopy = new ();
+        private bool _pauseUpdate = false;
 
-        private void CreateComponentsInGO(List<ComponentData> components)
-        {
-            foreach (var component in components.Where(co => !co.IsNull))
-            {
-                // create
-                var newComponent = Target.gameObject.AddComponent(component._component.GetType());
-
-                // copy values
-                foreach (var field in newComponent.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public))
-                {
-                    field.SetValue(newComponent, field.GetValue(component._component));
-                }
-
-                foreach (var prop in newComponent.GetType().GetProperties(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public).Where(p => p.Module.Name != "UnityEngine.CoreModule.dll"))
-                {
-                    prop.SetValue(newComponent, prop.GetValue(component._component));
-                }
-
-                // update reference
-                component._component = newComponent;
-            }
-        }
 
         public override VisualElement CreateInspectorGUI()
         {
@@ -96,6 +75,29 @@ namespace Packages.Estenis.ComponentGroupsEditor_
             return root;
         }
 
+        private void CreateComponentsInGO(List<ComponentData> components)
+        {
+            foreach (var component in components.Where(co => !co.IsNull))
+            {
+                // create
+                var newComponent = Target.gameObject.AddComponent(component._component.GetType());
+
+                // copy values
+                foreach (var field in newComponent.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public))
+                {
+                    field.SetValue(newComponent, field.GetValue(component._component));
+                }
+
+                foreach (var prop in newComponent.GetType().GetProperties(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public).Where(p => p.Module.Name != "UnityEngine.CoreModule.dll"))
+                {
+                    prop.SetValue(newComponent, prop.GetValue(component._component));
+                }
+
+                // update reference
+                component._component = newComponent;
+            }
+        }
+
         //
         // Event Handlers
         //
@@ -103,6 +105,36 @@ namespace Packages.Estenis.ComponentGroupsEditor_
         private void HandleFocusToggle(ChangeEvent<bool> changeEvent)
         {
             Debug.Log($"Focus toggle updated to {changeEvent.newValue}");
+
+            var componentsInGoNotInGroup = Target.gameObject.GetComponents<Component>()
+                .Where( c => !_groupExceptions.Any(s => s == c.GetType().Name) 
+                        && !Target._components.Any(co => co._component == c)
+                        && c != Target
+                        && (c && c != null));
+            if (changeEvent.newValue && !changeEvent.previousValue)
+            {
+                _pauseUpdate = true;
+                foreach (var component in componentsInGoNotInGroup)
+                {
+                    component.HideInInspector();
+                }
+                foreach (var componentData in Target._components)
+                {
+                    componentData._component.UnhideInInspector();
+                }
+            }
+            else if(!changeEvent.newValue && changeEvent.previousValue)
+            {
+                _pauseUpdate = false;
+                foreach (var component in componentsInGoNotInGroup)
+                {
+                    component.UnhideInInspector();
+                }
+                foreach (var componentData in Target._components)
+                {
+                    componentData._component.HideInInspector();
+                }
+            }
         }
 
         private List<ComponentData> GetComponentsNotInGO(List<ComponentData> components) =>
@@ -110,9 +142,16 @@ namespace Packages.Estenis.ComponentGroupsEditor_
                 .Where(grcd => !Target.gameObject.GetComponents<Component>().Any(goco => goco == grcd._component)) 
                 .ToList();
                
-
+        /// <summary>
+        /// Depending on mode it will show/hide components
+        /// </summary>
         private void OnUpdate()
         {
+            if(_pauseUpdate)
+            {
+                return;
+            }
+
             //Debug.LogWarning($"{nameof(ComponentGroupEditor)}.{nameof(OnUpdate)}");
             List<ListDifference<ComponentData>> diffs = Target._componentsCopy.Differences(Target._components);
             if (diffs.Count == 0)
