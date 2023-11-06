@@ -152,9 +152,28 @@ namespace Packages.Estenis.ComponentGroupsEditor_
             }
         }
 
+        /// <summary>
+        /// Show all components in GO including group components
+        /// </summary>
         private void OnVisibilityShow()
         {
-
+            var componentsInGoNotInGroup = Target.gameObject.GetComponents<Component>()
+                .Where(c => !_groupExceptions.Any(s => s == c.GetType().Name)
+                        && !Target._components.Any(co => co._component == c)
+                        && c != Target
+                        && (c && c != null));
+            foreach (var component in componentsInGoNotInGroup)
+            {
+                component.UnhideInInspector();
+            }
+            foreach (var componentData in Target._components)
+            {
+                componentData._component.UnhideInInspector();
+            }
+            if (target)
+            {
+                EditorUtility.SetDirty(target);
+            }
         }
 
         private void OnVisibilityFocus()
