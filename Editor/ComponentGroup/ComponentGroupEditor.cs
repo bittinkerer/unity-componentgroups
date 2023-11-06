@@ -82,6 +82,11 @@ namespace Packages.Estenis.ComponentGroupsEditor_
             {
                 // create
                 var newComponent = Target.gameObject.AddComponent(component._component.GetType());
+                if(!newComponent || newComponent == null)
+                {
+                    Debug.LogWarning($"{nameof(ComponentGroup)}.{nameof(CreateComponentsInGO)} could not create component {component._component.GetType().Name}");
+                    return;
+                }
 
                 // copy values
                 foreach (var field in newComponent.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public))
