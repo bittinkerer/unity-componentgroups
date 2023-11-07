@@ -1,7 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
     <ui:Label tabindex="-1" text="Name" display-tooltip-when-elided="true" name="name"  />
     
-    <ui:RadioButtonGroup label="Visibility" value="-1" name="_visibility" choices="Default, Focus, Show" />
+    <ui:RadioButtonGroup label="Show" value="-1" name="_visibility" choices="Others, Group, All" />
     <ui:ListView virtualization-method="DynamicHeight" binding-path="_components" show-add-remove-footer="true" show-border="true" show-foldout-header="true" header-title="Components" name="groups" />
     <ui:VisualElement style="flex-grow: 1;" />
 </ui:UXML>

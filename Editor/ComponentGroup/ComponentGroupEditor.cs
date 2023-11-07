@@ -25,6 +25,13 @@ namespace Packages.Estenis.ComponentGroupsEditor_
         // The following types should not be part of a group and should not be changed from group changes
         private string[] _groupExceptions = { "Transform", "ComponentFilter"};
 
+        private ViewContext _viewContext;
+
+        private void OnEnable()
+        {
+            Debug.Log("OnEnable()");
+
+        }
 
         public override VisualElement CreateInspectorGUI()
         {
@@ -56,6 +63,8 @@ namespace Packages.Estenis.ComponentGroupsEditor_
             var visibilityField = root.Q<RadioButtonGroup>("_visibility");
             visibilityField.value = (int)Target._selectedVisibility;
             visibilityField.RegisterCallback<ChangeEvent<int>>(ce => HandleVisibilityChange(ce, visibilityField));
+
+            Debug.Log($"Enable view {((ViewMode)visibilityField.value)}");
 
             // Set up groups
             var groupsListView = root.Q<ListView>();
@@ -115,7 +124,7 @@ namespace Packages.Estenis.ComponentGroupsEditor_
                 return;
             }
 
-            Target._selectedVisibility = (VisibilityMode)changeEvent.newValue;
+            Target._selectedVisibility = (ViewMode)changeEvent.newValue;
             switch (changeEvent.newValue)
             {
                 case 0:
@@ -212,7 +221,7 @@ namespace Packages.Estenis.ComponentGroupsEditor_
         {
             //Debug.LogWarning($"{nameof(ComponentGroupEditor)}.{nameof(OnUpdate)}");
             bool changesMade = false;
-            if (Target._selectedVisibility == VisibilityMode.DEFAULT)
+            if (Target._selectedVisibility == ViewMode.OTHERS)
             {
                 List<ListDifference<ComponentData>> diffs = Target._componentsCopy.Differences(Target._components);
                 if (diffs.Count == 0)
@@ -272,7 +281,7 @@ namespace Packages.Estenis.ComponentGroupsEditor_
                 return;
             }
             // Adjust visibility based on selected visibility mode
-            if (Target._selectedVisibility == VisibilityMode.DEFAULT)
+            if (Target._selectedVisibility == ViewMode.OTHERS)
             {
                 component.UnhideInInspector();
             }
@@ -285,7 +294,7 @@ namespace Packages.Estenis.ComponentGroupsEditor_
                 return;
             }
             // Adjust visibility based on selected visibility mode
-            if (Target._selectedVisibility == VisibilityMode.DEFAULT)
+            if (Target._selectedVisibility == ViewMode.OTHERS)
             {
                 component.HideInInspector();
             }
