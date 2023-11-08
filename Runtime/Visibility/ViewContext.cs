@@ -5,20 +5,20 @@ using System.Collections.Generic;
 public sealed class ViewContext
 {
 
-    public ViewContext()
+    static ViewContext()
     {
-        _viewStatesTable = new Dictionary<ViewMode, IViewState>
+        _viewStatesTable = new Dictionary<ViewMode, IViewStrategy>
         {
-            { ViewMode.GROUP, new GroupViewState() },
-            { ViewMode.OTHERS, new OthersViewState() },
-            { ViewMode.ALL, new AllViewState() },
+            { ViewMode.GROUP, new GroupViewStrategy() },
+            { ViewMode.OTHERS, new OthersViewStrategy() },
+            { ViewMode.ALL, new AllViewStrategy() },
         };
 
     }
 
-    private Dictionary<ViewMode, IViewState> _viewStatesTable;
+    private static Dictionary<ViewMode, IViewStrategy> _viewStatesTable;
 
-    public IViewState GetView(ViewMode mode)
+    public static IViewStrategy GetView(ViewMode mode)
         => _viewStatesTable[mode];
 
     

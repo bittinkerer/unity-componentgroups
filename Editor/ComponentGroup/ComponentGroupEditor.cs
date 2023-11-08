@@ -25,13 +25,8 @@ namespace Packages.Estenis.ComponentGroupsEditor_
         // The following types should not be part of a group and should not be changed from group changes
         private string[] _groupExceptions = { "Transform", "ComponentFilter"};
 
-        private ViewContext _viewContext;
+        private IViewStrategy View => ViewContext.GetView(Target._selectedVisibility);
 
-        private void OnEnable()
-        {
-            Debug.Log("OnEnable()");
-
-        }
 
         public override VisualElement CreateInspectorGUI()
         {
@@ -63,7 +58,7 @@ namespace Packages.Estenis.ComponentGroupsEditor_
             var visibilityField = root.Q<RadioButtonGroup>("_visibility");
             visibilityField.value = (int)Target._selectedVisibility;
             visibilityField.RegisterCallback<ChangeEvent<int>>(ce => HandleVisibilityChange(ce, visibilityField));
-
+            
             Debug.Log($"Enable view {((ViewMode)visibilityField.value)}");
 
             // Set up groups
@@ -125,88 +120,12 @@ namespace Packages.Estenis.ComponentGroupsEditor_
             }
 
             Target._selectedVisibility = (ViewMode)changeEvent.newValue;
-            switch (changeEvent.newValue)
-            {
-                case 0:
-                    OnVisibilityDefault();
-                    break;
-                case 1:
-                    OnVisibilityFocus();
-                    break;
-                case 2:
-                    OnVisibilityShow();
-                    break;
-                default:
-                    break;
-            }
+            View.ShowGOComponents(Target);
+
             if (target)
             {
                 EditorUtility.SetDirty(target);
             }
-        }
-
-        private void OnVisibilityDefault()
-        {
-            var componentsInGoNotInGroup = Target.gameObject.GetComponents<Component>()
-                .Where(c => !_groupExceptions.Any(s => s == c.GetType().Name)
-                        && !Target._components.Any(co => co._component == c)
-                        && c != Target
-                        && (c && c != null));
-            foreach (var component in componentsInGoNotInGroup)
-            {
-                component.UnhideInInspector();
-            }
-            foreach (var componentData in Target._components)
-            {
-                componentData._component.HideInInspector();
-            }
-            if (target)
-            {
-                EditorUtility.SetDirty(target);
-            }
-        }
-
-        /// <summary>
-        /// Show all components in GO including group components
-        /// </summary>
-        private void OnVisibilityShow()
-        {
-            var componentsInGoNotInGroup = Target.gameObject.GetComponents<Component>()
-                .Where(c => !_groupExceptions.Any(s => s == c.GetType().Name)
-                        && !Target._components.Any(co => co._component == c)
-                        && c != Target
-                        && (c && c != null));
-            foreach (var component in componentsInGoNotInGroup)
-            {
-                component.UnhideInInspector();
-            }
-            foreach (var componentData in Target._components)
-            {
-                componentData._component.UnhideInInspector();
-            }
-            if (target)
-            {
-                EditorUtility.SetDirty(target);
-            }
-        }
-
-        private void OnVisibilityFocus()
-        {
-            var componentsInGoNotInGroup = Target.gameObject.GetComponents<Component>()
-                .Where(c => !_groupExceptions.Any(s => s == c.GetType().Name)
-                        && !Target._components.Any(co => co._component == c)
-                        && c != Target
-                        && (c && c != null));
-            
-            foreach (var component in componentsInGoNotInGroup)
-            {
-                component.HideInInspector();
-            }
-            foreach (var componentData in Target._components)
-            {
-                componentData._component.UnhideInInspector();
-            }
-            
         }
 
         private List<ComponentData> GetComponentsNotInGO(List<ComponentData> components) =>
@@ -219,40 +138,24 @@ namespace Packages.Estenis.ComponentGroupsEditor_
         /// </summary>
         private void OnUpdate()
         {
-            //Debug.LogWarning($"{nameof(ComponentGroupEditor)}.{nameof(OnUpdate)}");
-            bool changesMade = false;
-            if (Target._selectedVisibility == ViewMode.OTHERS)
+            // check for diffs
+            List<ListDifference<ComponentData>> diffs = Target._componentsCopy.Differences(Target._components);
+            if(diffs.Count == 0)
             {
-                List<ListDifference<ComponentData>> diffs = Target._componentsCopy.Differences(Target._components);
-                if (diffs.Count == 0)
-                {
-                    return;
-                }
-
-                foreach (var diff in diffs)
-                {
-                    var component = diff.Item._component;
-                    if (diff.ListChangeType == ListChangeType.ADDED)
-                    {
-                        changesMade = true;
-                        HandleOnComponentAdded(component);
-                    }
-                    else if (diff.ListChangeType == ListChangeType.REMOVED)
-                    {
-                        changesMade = true;
-                        HandleOnComponentRemoved(component);
-                    }
-                }
+                return;
             }
 
-            if (changesMade)
+            // update components shown
+            View.ShowGOComponents(Target);
+            //View.UpdateGoComponentsOnDiffs(diffs);
+
+            if(target)
             {
-                Target._componentsCopy = new(Target._components);
-                if (target)
-                {
-                    EditorUtility.SetDirty(target);
-                }
+                EditorUtility.SetDirty(target);
             }
+
+            // sync copy
+            Target._componentsCopy = new(Target._components);
         }
 
         private TemplateContainer MakeItem()
@@ -266,38 +169,16 @@ namespace Packages.Estenis.ComponentGroupsEditor_
                 int index = objectField?.userData == null 
                                 ? lastIndex
                                 : (objectField.userData as int?).Value;
+                
+                View.UpdateGOComponentsOnDiffs(
+                    new List<ListDifference<Component>> {
+                        new ListDifference<Component> { ListChangeType = ListChangeType.ADDED, Item = (Component)evt.newValue },
+                        new ListDifference<Component> { ListChangeType = ListChangeType.REMOVED, Item = (Component)evt.previousValue },
+                    });
                 Target._components[index]._component = (Component)evt.newValue;
-                HandleOnComponentRemoved((Component)evt.previousValue);
-                HandleOnComponentAdded(Target._components[index]._component);
                 EditorUtility.SetDirty(target);
             });
             return tc;
-        }
-
-        private void HandleOnComponentRemoved(Component component)
-        {
-            if(component == null)
-            {
-                return;
-            }
-            // Adjust visibility based on selected visibility mode
-            if (Target._selectedVisibility == ViewMode.OTHERS)
-            {
-                component.UnhideInInspector();
-            }
-        }
-
-        private void HandleOnComponentAdded(Component component)
-        {
-            if (component == null)
-            {
-                return;
-            }
-            // Adjust visibility based on selected visibility mode
-            if (Target._selectedVisibility == ViewMode.OTHERS)
-            {
-                component.HideInInspector();
-            }
         }
 
         private void OnComponentChanged(ChangeEvent<UnityEngine.Object> evt)
@@ -361,8 +242,8 @@ namespace Packages.Estenis.ComponentGroupsEditor_
             var component = (Component)element.Q<ObjectField>()?.value;
             if (component)
             {
-                component.UnhideInInspector();
                 Debug.Log($"[{Time.time}] Groups item Unbound for {component.name}");
+                // @TODO: Should update Target._components ??
             }
             else
             {
