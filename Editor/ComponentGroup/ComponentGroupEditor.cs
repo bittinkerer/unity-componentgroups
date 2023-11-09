@@ -65,15 +65,14 @@ namespace Packages.Estenis.ComponentGroupsEditor_
             var groupsListView = root.Q<ListView>();
             groupsListView.itemsSource = Target._components;
 
+            //
+            // Event Handling
             groupsListView.makeItem = MakeItem;
             groupsListView.bindItem += OnGroupsItemBound;
             groupsListView.unbindItem += OnGroupsItemUnBound;
             groupsListView.itemsAdded += GroupsListView_itemsAdded;
             groupsListView.itemsSourceChanged += GroupsListView_itemsSourceChanged;
             groupsListView.itemIndexChanged += GroupsListView_itemIndexChanged;
-
-            groupsListView.TrackPropertyValue(
-                new SerializedObject( target ).FindProperty("_components"), OnComponentsChanged);
 
             // Set up focus
 
@@ -164,6 +163,8 @@ namespace Packages.Estenis.ComponentGroupsEditor_
             int lastIndex   = Target._components.Count - 1;
             var objectField = tc.Q<ObjectField>();
 
+            
+
             tc.Q<ObjectField>().RegisterValueChangedCallback(evt =>
             {
                 int index = objectField?.userData == null 
@@ -176,6 +177,14 @@ namespace Packages.Estenis.ComponentGroupsEditor_
                         new ListDifference<Component> { ListChangeType = ListChangeType.REMOVED, Item = (Component)evt.previousValue },
                     });
                 Target._components[index]._component = (Component)evt.newValue;
+
+                // Add component inspector under the component selector
+                if (evt.newValue != null)
+                {
+                    var parentElement = tc.Q("component-details");
+                    parentElement.Add(new InspectorElement(evt.newValue));
+                }
+
                 EditorUtility.SetDirty(target);
             });
             return tc;
@@ -189,11 +198,6 @@ namespace Packages.Estenis.ComponentGroupsEditor_
         private void GroupsListView_itemsSourceChanged()
         {
             Debug.Log("[{Time.time}] Items Source changed.");
-        }
-
-        private void OnComponentsChanged(SerializedProperty property)
-        {
-            Debug.Log($"[{Time.time}] Components changed.");
         }
 
         private void GroupsListView_itemIndexChanged(int arg1, int arg2)
