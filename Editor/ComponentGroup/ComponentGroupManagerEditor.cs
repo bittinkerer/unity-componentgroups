@@ -1,6 +1,4 @@
 using Packages.Estenis.ComponentGroups_;
-using System;
-using System.Diagnostics;
 using UnityEditor;
 using UnityEngine.UIElements;
 

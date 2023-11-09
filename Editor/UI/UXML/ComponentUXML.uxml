@@ -1,3 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xmlns="UnityEngine.UIElements" ue="UnityEditor.UIElements" editor-extension-mode="True">
-    <uie:ObjectField binding-path="_component" type="UnityEngine.Component, UnityEngine.CoreModule" />
+    <Style src="project://database/Packages/com.estenis.componentgroups/Editor/UI/Styles/ComponentSS.uss?fileID=7433441132597879392&amp;guid=6cffe5d2aaa0e6b4c9ee2df0f910a4fd&amp;type=3#ComponentSS" />
+    <ui:VisualElement class="group-row">
+        <ui:Button display-tooltip-when-elided="true" class="group-row-side" style="opacity: 1; background-image: url(&apos;project://database/Packages/com.estenis.componentgroups/Editor/UI/Images/arrow_drop_down.png?fileID=2800000&amp;guid=3afc6440ac602b246a83710836115418&amp;type=3#arrow_drop_down&apos;); flex-basis: 5%; background-color: rgba(0, 0, 0, 0); border-left-color: rgba(0, 0, 0, 0.41); border-right-color: rgba(0, 0, 0, 0.41); border-top-color: rgba(0, 0, 0, 0.41); border-bottom-color: rgba(0, 0, 0, 0.41); -unity-background-image-tint-color: rgba(108, 108, 108, 255);" />
+        <uie:ObjectField binding-path="_component" type="UnityEngine.Component, UnityEngine.CoreModule" class="group-row-main" />
+    </ui:VisualElement>
 </ui:UXML>

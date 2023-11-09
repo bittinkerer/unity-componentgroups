@@ -1,0 +1,19 @@
+.group-row {
+    flex-direction: row;
+}
+
+.group-row-side {
+    flex: 1 10%;
+    flex-grow: 1;
+}
+
+.group-row-main {
+    flex: 1 100%;
+    flex-grow: 9;
+}
+
+.img {
+    /* background-color: white; */
+    --unity-image: resource("arrow_drop_down.png");
+     
+}
