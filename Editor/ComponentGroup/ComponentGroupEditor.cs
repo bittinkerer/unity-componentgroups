@@ -163,7 +163,8 @@ namespace Packages.Estenis.ComponentGroupsEditor_
             int lastIndex   = Target._components.Count - 1;
             var objectField = tc.Q<ObjectField>();
 
-            
+            var dropdownButton = tc.Q<UnityEngine.UIElements.Button>("btn-expand");
+            dropdownButton.clicked += DropdownButton_onClick;
 
             tc.Q<ObjectField>().RegisterValueChangedCallback(evt =>
             {
@@ -178,7 +179,7 @@ namespace Packages.Estenis.ComponentGroupsEditor_
                     });
                 Target._components[index]._component = (Component)evt.newValue;
 
-                // Add component inspector under the component selector
+                // Add component inspector under the component details element
                 if (evt.newValue != null)
                 {
                     var parentElement = tc.Q("component-details");
@@ -188,6 +189,11 @@ namespace Packages.Estenis.ComponentGroupsEditor_
                 EditorUtility.SetDirty(target);
             });
             return tc;
+        }
+
+        private void DropdownButton_onClick()
+        {
+            Debug.LogWarning("EXPAND CLICKED");
         }
 
         private void OnComponentChanged(ChangeEvent<UnityEngine.Object> evt)
