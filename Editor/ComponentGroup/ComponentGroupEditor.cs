@@ -197,12 +197,14 @@ namespace Packages.Estenis.ComponentGroupsEditor_
         {
             rootVisualElement.Q("btn-collapse").style.display = DisplayStyle.None;
             rootVisualElement.Q("btn-expand").style.display = DisplayStyle.Flex;
+            rootVisualElement.Q("component-details").style.display = DisplayStyle.None;
         }
 
         private void DropdownButton_onClick(TemplateContainer rootVisualElement)
         {
             rootVisualElement.Q("btn-collapse").style.display = DisplayStyle.Flex;
             rootVisualElement.Q("btn-expand").style.display = DisplayStyle.None;
+            rootVisualElement.Q("component-details").style.display = DisplayStyle.Flex;
             Debug.LogWarning("EXPAND CLICKED");
         }
 

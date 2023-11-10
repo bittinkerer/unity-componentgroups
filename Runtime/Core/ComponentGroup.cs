@@ -28,7 +28,6 @@ namespace Packages.Estenis.ComponentGroups_
     public class ComponentData : IEquatable<ComponentData>, INullable
     {
         [SerializeField] public Component _component;
-        [SerializeField][HideInInspector] public bool _expanded;
 
         public override int GetHashCode()
         {
