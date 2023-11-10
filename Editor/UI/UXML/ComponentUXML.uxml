@@ -1,10 +1,9 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xmlns="UnityEngine.UIElements" ue="UnityEditor.UIElements" editor-extension-mode="True">
     <Style src="project://database/Packages/com.estenis.componentgroups/Editor/UI/Styles/ComponentSS.uss?fileID=7433441132597879392&amp;guid=6cffe5d2aaa0e6b4c9ee2df0f910a4fd&amp;type=3#ComponentSS" />
-    
-    <ui:VisualElement class="group-row" name="component-container">
-        <ui:Button name="btn-expand" display-tooltip-when-elided="true" class="group-row-side" style="opacity: 1; background-image: url(&apos;project://database/Assets/UnityDefaultRuntimeTheme.tss?fileID=-1304905567622442630&amp;guid=1bcf49af68d6c884a9e0c5d9101c183a&amp;type=3#arrow-down@2x&apos;); flex-basis: 5%; background-color: rgba(0, 0, 0, 0); border-left-color: rgba(0, 0, 0, 0); border-right-color: rgba(0, 0, 0, 0); border-top-color: rgba(0, 0, 0, 0); border-bottom-color: rgba(0, 0, 0, 0); -unity-background-image-tint-color: rgb(108, 108, 108);" />
+    <ui:VisualElement name="component-container" class="group-row">
+        <ui:Button name="btn-collapse" display-tooltip-when-elided="true" class="group-row-side" style="opacity: 1; background-image: url(&apos;project://database/Assets/UnityDefaultRuntimeTheme.tss?fileID=-1304905567622442630&amp;guid=1bcf49af68d6c884a9e0c5d9101c183a&amp;type=3#arrow-down@2x&apos;); flex-basis: 5%; background-color: rgba(0, 0, 0, 0); border-left-color: rgba(0, 0, 0, 0); border-right-color: rgba(0, 0, 0, 0); border-top-color: rgba(0, 0, 0, 0); border-bottom-color: rgba(0, 0, 0, 0); -unity-background-image-tint-color: rgb(108, 108, 108);" />
+        <ui:Button name="btn-expand" display-tooltip-when-elided="true" class="group-row-side" style="opacity: 1; background-image: url(&apos;project://database/Assets/UnityDefaultRuntimeTheme.tss?fileID=-1087164816274819069&amp;guid=1bcf49af68d6c884a9e0c5d9101c183a&amp;type=3#arrow-right@2x&apos;); flex-basis: 5%; background-color: rgba(0, 0, 0, 0); border-left-color: rgba(0, 0, 0, 0); border-right-color: rgba(0, 0, 0, 0); border-top-color: rgba(0, 0, 0, 0); border-bottom-color: rgba(0, 0, 0, 0); -unity-background-image-tint-color: rgb(108, 108, 108); display: none;" />
         <uie:ObjectField binding-path="_component" type="UnityEngine.Component, UnityEngine.CoreModule" class="group-row-main" />
     </ui:VisualElement>
-    <ui:VisualElement name="component-details">
-    </ui:VisualElement>
+    <ui:VisualElement name="component-details" />
 </ui:UXML>

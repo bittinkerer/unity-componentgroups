@@ -14,7 +14,7 @@ namespace Packages.Estenis.ComponentGroups_
         [SerializeField] public ViewMode _selectedVisibility;
         [SerializeField] private string _typeName = "ComponentGroup";
         [SerializeField] public List<ComponentData> _components = new();
-        [SerializeField] [HideInInspector] public List<ComponentData> _componentsCopy = new();
+        [SerializeField] [HideInInspector] public List<ComponentData> _componentsCopy = new();        
 
         public void SetTypeName(string typeName)
         {
@@ -28,6 +28,7 @@ namespace Packages.Estenis.ComponentGroups_
     public class ComponentData : IEquatable<ComponentData>, INullable
     {
         [SerializeField] public Component _component;
+        [SerializeField][HideInInspector] public bool _expanded;
 
         public override int GetHashCode()
         {

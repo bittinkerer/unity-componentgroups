@@ -164,7 +164,9 @@ namespace Packages.Estenis.ComponentGroupsEditor_
             var objectField = tc.Q<ObjectField>();
 
             var dropdownButton = tc.Q<UnityEngine.UIElements.Button>("btn-expand");
-            dropdownButton.clicked += DropdownButton_onClick;
+            dropdownButton.clicked += () => DropdownButton_onClick(tc);
+            var collapseButton = tc.Q<UnityEngine.UIElements.Button>("btn-collapse");
+            collapseButton.clicked += () => CollapseButton_clicked(tc);
 
             tc.Q<ObjectField>().RegisterValueChangedCallback(evt =>
             {
@@ -191,8 +193,16 @@ namespace Packages.Estenis.ComponentGroupsEditor_
             return tc;
         }
 
-        private void DropdownButton_onClick()
+        private void CollapseButton_clicked(TemplateContainer rootVisualElement)
         {
+            rootVisualElement.Q("btn-collapse").style.display = DisplayStyle.None;
+            rootVisualElement.Q("btn-expand").style.display = DisplayStyle.Flex;
+        }
+
+        private void DropdownButton_onClick(TemplateContainer rootVisualElement)
+        {
+            rootVisualElement.Q("btn-collapse").style.display = DisplayStyle.Flex;
+            rootVisualElement.Q("btn-expand").style.display = DisplayStyle.None;
             Debug.LogWarning("EXPAND CLICKED");
         }
 
