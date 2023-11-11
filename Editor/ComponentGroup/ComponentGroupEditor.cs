@@ -205,7 +205,6 @@ namespace Packages.Estenis.ComponentGroupsEditor_
             rootVisualElement.Q("btn-collapse").style.display = DisplayStyle.Flex;
             rootVisualElement.Q("btn-expand").style.display = DisplayStyle.None;
             rootVisualElement.Q("component-details").style.display = DisplayStyle.Flex;
-            Debug.LogWarning("EXPAND CLICKED");
         }
 
         private void OnComponentChanged(ChangeEvent<UnityEngine.Object> evt)
