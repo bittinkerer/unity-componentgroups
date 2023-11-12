@@ -2,9 +2,9 @@
     <ui:GroupBox>
         <ui:GroupBox style="flex-direction: row; margin-bottom: -10px; border-left-color: rgb(5, 5, 5); border-right-color: rgb(5, 5, 5); border-top-color: rgb(5, 5, 5); border-bottom-color: rgb(5, 5, 5); border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0;">
             <ui:VisualElement name="foo" style="flex: 2 20%;">
-                <ui:Label text="VIEW" style="min-width: 70px;" />
+                <ui:Label text="View" style="min-width: 70px; -unity-font-style: bold; text-shadow: 0 0 0 rgb(0, 0, 0);" />
             </ui:VisualElement>
-            <ui:VisualElement name="goo" style="flex-direction: row; flex: 8 80%; border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; border-bottom-width: 2px; border-left-color: rgba(5, 5, 5, 255); border-right-color: rgba(5, 5, 5, 255); border-top-color: rgba(5, 5, 5, 255); border-bottom-color: rgba(5, 5, 5, 255);">
+            <ui:VisualElement name="goo" style="flex-direction: row; flex: 8 80%; border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; border-bottom-width: 2px; border-left-color: rgb(40, 40, 40); border-right-color: rgb(40, 40, 40); border-top-color: rgb(40, 40, 40); border-bottom-color: rgb(40, 40, 40); align-items: stretch; justify-content: space-around;">
                 <ui:Label text="Others" style="min-width: 70px;" />
                 <ui:Label text="Group" style="min-width: 70px;" />
                 <ui:Label text="All" style="min-width: 70px;" />
@@ -12,7 +12,7 @@
         </ui:GroupBox>
         <ui:GroupBox style="flex-direction: row; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; border-left-color: rgb(5, 5, 5); border-right-color: rgb(5, 5, 5); border-top-color: rgb(5, 5, 5); border-bottom-color: rgb(5, 5, 5);">
             <ui:VisualElement name="too" style="flex: 2 20%;" />
-            <ui:VisualElement name="yoo" style="margin-top: -6px; flex-direction: row; flex: 8 80%; border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; border-bottom-width: 2px; border-left-color: rgba(5, 5, 5, 255); border-right-color: rgba(5, 5, 5, 255); border-top-color: rgba(5, 5, 5, 255); border-bottom-color: rgba(5, 5, 5, 255);">
+            <ui:VisualElement name="yoo" style="margin-top: -6px; flex-direction: row; flex: 8 80%; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(40, 40, 40); border-right-color: rgb(40, 40, 40); border-top-color: rgb(40, 40, 40); border-bottom-color: rgb(40, 40, 40); justify-content: space-around;">
                 <ui:RadioButton style="min-width: 67px;" />
                 <ui:RadioButton style="min-width: 67px;" />
                 <ui:RadioButton style="min-width: 67px;" />
