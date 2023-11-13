@@ -58,7 +58,16 @@ namespace Packages.Estenis.ComponentGroupsEditor_
             var visibilityField = root.Q<RadioButtonGroup>("_visibility");
             visibilityField.value = (int)Target._selectedVisibility;
             visibilityField.RegisterCallback<ChangeEvent<int>>(ce => HandleVisibilityChange(ce, visibilityField));
+
+            var viewOthersButton = root.Q<RadioButton>("view-others");
             
+            var viewOptions = root.Query<RadioButton>(className: "view-option").ToList();
+            foreach (var viewOption in viewOptions)
+            {
+                viewOption.RegisterCallback<ChangeEvent<bool>>(ce => HandleViewChange(ce, viewOptions));
+            }
+            viewOptions[(int)Target._selectedVisibility].value = true;
+
             Debug.Log($"Enable view {((ViewMode)visibilityField.value)}");
 
             // Set up groups
@@ -77,6 +86,11 @@ namespace Packages.Estenis.ComponentGroupsEditor_
             // Set up focus
 
             return root;
+        }
+
+        private void HandleViewChange(ChangeEvent<bool> ce, List<RadioButton> viewOptions)
+        {
+            Debug.Log("Test View Change");
         }
 
         private void CreateComponentsInGO(List<ComponentData> components)
