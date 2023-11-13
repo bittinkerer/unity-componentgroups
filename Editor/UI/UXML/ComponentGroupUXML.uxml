@@ -13,9 +13,9 @@
         <ui:GroupBox style="flex-direction: row; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; border-left-color: rgb(5, 5, 5); border-right-color: rgb(5, 5, 5); border-top-color: rgb(5, 5, 5); border-bottom-color: rgb(5, 5, 5);">
             <ui:VisualElement style="flex: 2 20%;" />
             <ui:VisualElement name="view-choices" style="margin-top: -6px; flex-direction: row; flex: 8 80%; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(40, 40, 40); border-right-color: rgb(40, 40, 40); border-top-color: rgb(40, 40, 40); border-bottom-color: rgb(40, 40, 40); justify-content: space-around;">
-                <ui:RadioButton name="view-others"  class="view-option" style="min-width: 67px;" />
-                <ui:RadioButton name="view-group"   class="view-option" style="min-width: 67px;" />
-                <ui:RadioButton name="view-all"     class="view-option" style="min-width: 67px;" />
+                <ui:RadioButton name="view-others"  user-data="Others" class="view-option" style="min-width: 67px;" />
+                <ui:RadioButton name="view-group"   user-data="Group" class="view-option" style="min-width: 67px;" />
+                <ui:RadioButton name="view-all"     user-data="All" class="view-option" style="min-width: 67px;" />
             </ui:VisualElement>
         </ui:GroupBox>
     </ui:GroupBox>

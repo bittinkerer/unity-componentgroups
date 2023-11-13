@@ -62,8 +62,10 @@ namespace Packages.Estenis.ComponentGroupsEditor_
             var viewOthersButton = root.Q<RadioButton>("view-others");
             
             var viewOptions = root.Query<RadioButton>(className: "view-option").ToList();
+            int i = 0;
             foreach (var viewOption in viewOptions)
             {
+                viewOption.userData = i++;
                 viewOption.RegisterCallback<ChangeEvent<bool>>(ce => HandleViewChange(ce, viewOptions));
             }
             viewOptions[(int)Target._selectedVisibility].value = true;
@@ -90,7 +92,27 @@ namespace Packages.Estenis.ComponentGroupsEditor_
 
         private void HandleViewChange(ChangeEvent<bool> ce, List<RadioButton> viewOptions)
         {
-            Debug.Log("Test View Change");
+            if(!ce.newValue)
+            {
+                return;
+            }
+
+            var selected = (int)((RadioButton)ce.target).userData;
+            for (int i = 0; i < viewOptions.Count; i++) 
+            { 
+                if(i != selected)
+                {
+                    viewOptions[i].value = false;
+                }
+            }
+            
+            Target._selectedVisibility = (ViewMode)selected;
+            View.ShowGOComponents(Target);
+
+            if (target)
+            {
+                EditorUtility.SetDirty(target);
+            }
         }
 
         private void CreateComponentsInGO(List<ComponentData> components)
