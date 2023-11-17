@@ -1,5 +1,6 @@
 using Packages.Estenis.ComponentGroups_;
 using UnityEditor;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Packages.Estenis.ComponentGroupsEditor_
@@ -9,7 +10,11 @@ namespace Packages.Estenis.ComponentGroupsEditor_
     {
         public VisualTreeAsset _inspectorXML;
         private VisualElement _root;
-        
+
+        private void OnEnable()
+        {
+            Debug.LogWarning($"{nameof(ComponentGroupManagerEditor)}.{nameof(OnEnable)}");
+        }
 
         public override VisualElement CreateInspectorGUI()
         {

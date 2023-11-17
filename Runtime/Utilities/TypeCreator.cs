@@ -9,7 +9,7 @@ namespace Packages.Estenis.ComponentGroups_
 	public class TypeCreator
 	{
 		public static Type CreateType<T>(string moduleName, string typeName)
-			where T : MonoBehaviour
+			where T : Behaviour
 		{
             AssemblyName assemblyName = new($"{moduleName}_asm");
 			var assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(
