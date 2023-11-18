@@ -36,6 +36,7 @@ namespace Packages.Estenis.ComponentGroups_
         public void AddComponentGroup(string groupName)
         {
             var componentGroup = gameObject.AddComponent<ComponentGroup>();
+            componentGroup.SetTypeName(groupName);
             _groups.Add(groupName);
 
         }
