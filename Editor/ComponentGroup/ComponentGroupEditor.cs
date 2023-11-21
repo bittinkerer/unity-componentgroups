@@ -21,6 +21,14 @@ namespace Packages.Estenis.ComponentGroupsEditor_
 
         public ComponentGroup Target => target as ComponentGroup;
 
+        private void OnEnable()
+        {
+             
+            Debug.LogWarning($"OnEnable {nameof(ComponentGroupEditor)}");
+            var foo = ComponentGroupManager.GetByInstanceId(target.GetInstanceID());
+            var goo = targets;
+        }
+
         //
         // The following types should not be part of a group and should not be changed from group changes
         private string[] _groupExceptions = { "Transform", "ComponentFilter"};
@@ -71,6 +79,10 @@ namespace Packages.Estenis.ComponentGroupsEditor_
             viewOptions[(int)Target._selectedVisibility].value = true;
 
             Debug.Log($"Enable view {((ViewMode)visibilityField.value)}");
+
+            // View Dropdown
+            var ddViewOptions = root.Q<DropdownField>("dd-view-options");
+            ddViewOptions.RegisterValueChangedCallback(evt => Debug.LogWarning(evt.newValue));
 
             // Set up groups
             var groupsListView = root.Q<ListView>();
