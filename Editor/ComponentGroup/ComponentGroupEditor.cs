@@ -19,6 +19,8 @@ namespace Packages.Estenis.ComponentGroupsEditor_
         [SerializeField] private VisualTreeAsset _editorAsset;
         [SerializeField] private VisualTreeAsset _componentAsset;
 
+        public readonly string ComponentGroupModuleName = "ComponentGroupModule";
+
         public ComponentGroup Target => target as ComponentGroup;
 
         private void OnEnable()
@@ -27,6 +29,12 @@ namespace Packages.Estenis.ComponentGroupsEditor_
             Debug.LogWarning($"OnEnable {nameof(ComponentGroupEditor)}");
             var foo = ComponentGroupManager.GetByInstanceId(target.GetInstanceID());
             var goo = targets;
+
+            // try changing the type of target on the fly ...
+            
+            Type cgDerivedType = TypeCreator.CreateType<ComponentGroup>(
+                ComponentGroupModuleName, ((ComponentGroup)target).TypeName);
+            target.TransmuteTo(Activator.CreateInstance(cgDerivedType));
         }
 
         //
@@ -82,7 +90,7 @@ namespace Packages.Estenis.ComponentGroupsEditor_
 
             // View Dropdown
             var ddViewOptions = root.Q<DropdownField>("dd-view-options");
-            ddViewOptions.RegisterValueChangedCallback(evt => Debug.LogWarning(evt.newValue));
+            ddViewOptions.RegisterValueChangedCallback(OnViewOptionsChanged);
 
             // Set up groups
             var groupsListView = root.Q<ListView>();
@@ -102,6 +110,18 @@ namespace Packages.Estenis.ComponentGroupsEditor_
             return root;
         }
 
+        private void OnViewOptionsChanged(ChangeEvent<string> evt)
+        {
+            if (evt.previousValue == evt.newValue) return;
+
+            Target._selectedVisibility = Enum.Parse<ViewMode>(evt.newValue.ToUpper());
+            View.ShowGOComponents(Target);
+            if (target)
+            {
+                EditorUtility.SetDirty(target);
+            }
+        }
+
         private void HandleViewChange(ChangeEvent<bool> ce, List<RadioButton> viewOptions)
         {
             if(!ce.newValue)
@@ -110,13 +130,13 @@ namespace Packages.Estenis.ComponentGroupsEditor_
             }
 
             var selected = (int)((RadioButton)ce.target).userData;
-            for (int i = 0; i < viewOptions.Count; i++) 
-            { 
-                if(i != selected)
-                {
-                    viewOptions[i].value = false;
-                }
-            }
+            //for (int i = 0; i < viewOptions.Count; i++) 
+            //{ 
+            //    if(i != selected)
+            //    {
+            //        viewOptions[i].value = false;
+            //    }
+            //}
             
             Target._selectedVisibility = (ViewMode)selected;
             View.ShowGOComponents(Target);
