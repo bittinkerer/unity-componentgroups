@@ -32,9 +32,7 @@ namespace Packages.Estenis.ComponentGroupsEditor_
 
             // try changing the type of target on the fly ...
             
-            Type cgDerivedType = TypeCreator.CreateType<ComponentGroup>(
-                ComponentGroupModuleName, ((ComponentGroup)target).TypeName);
-            target.TransmuteTo(Activator.CreateInstance(cgDerivedType));
+            
         }
 
         //

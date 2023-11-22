@@ -1,9 +1,9 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
-    <ui:VisualElement style="flex-direction: row; margin-bottom: -6px; margin-top: 5px;">
+    <ui:VisualElement style="flex-direction: row; margin-bottom: 6px; margin-top: 5px;">
         <ui:Label tabindex="-1" binding-path="_typeName" display-tooltip-when-elided="true" name="name" style="flex: 4 40%; -unity-font-style: bold;" />
-        <ui:DropdownField name="dd-view-options" index="-1" choices="OTHERS, GROUP, ALL" label="VIEW" style="flex: 6 60%; margin-right: 10px;" binding-path="_selectedVisibility"/>
+        <ui:DropdownField name="dd-view-options" index="-1" choices="OTHERS, GROUP, ALL" binding-path="_selectedVisibility" style="flex: 5 50%; margin-right: 5px;" />
     </ui:VisualElement>
-    <ui:GroupBox>
+    <ui:GroupBox style="display: none;">
         <ui:GroupBox style="flex-direction: row; margin-bottom: -10px; border-left-color: rgb(5, 5, 5); border-right-color: rgb(5, 5, 5); border-top-color: rgb(5, 5, 5); border-bottom-color: rgb(5, 5, 5); border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0;">
             <ui:VisualElement style="flex: 2 20%;">
                 <ui:Label text="View" style="min-width: 70px; -unity-font-style: bold; text-shadow: 0 0 0 rgb(0, 0, 0);" />
