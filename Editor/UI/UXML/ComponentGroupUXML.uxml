@@ -1,28 +1,13 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
     <ui:VisualElement style="flex-direction: row; margin-bottom: 6px; margin-top: 5px;">
-        <ui:Label tabindex="-1" binding-path="_typeName" display-tooltip-when-elided="true" name="name" style="flex: 4 40%; -unity-font-style: bold;" />
-        <ui:DropdownField name="dd-view-options" index="-1" choices="OTHERS, GROUP, ALL" binding-path="_selectedVisibility" style="flex: 5 50%; margin-right: 5px;" />
+        <!-- <ui:Label tabindex="-1" binding-path="_typeName" display-tooltip-when-elided="true" name="name" style="flex: 4 40%; -unity-font-style: bold;" /> -->
+        <ui:VisualElement style="flex-direction: row; flex: 4 40%;">
+            <ui:TextField name="group-name" picking-mode="Ignore" label="" style="width: 90%; display: flex;" />
+            <ui:Button text="+" parse-escape-sequences="true" display-tooltip-when-elided="true" name="AddGroupButton" />
+        </ui:VisualElement>
+        <ui:DropdownField name="dd-view-options" index="-1" choices="OTHERS, GROUP, ALL" binding-path="_selectedVisibility" style="flex: 3 30%; " />
     </ui:VisualElement>
-    <ui:GroupBox style="display: none;">
-        <ui:GroupBox style="flex-direction: row; margin-bottom: -10px; border-left-color: rgb(5, 5, 5); border-right-color: rgb(5, 5, 5); border-top-color: rgb(5, 5, 5); border-bottom-color: rgb(5, 5, 5); border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0;">
-            <ui:VisualElement style="flex: 2 20%;">
-                <ui:Label text="View" style="min-width: 70px; -unity-font-style: bold; text-shadow: 0 0 0 rgb(0, 0, 0);" />
-            </ui:VisualElement>
-            <ui:VisualElement name="view-headings" style="flex-direction: row; flex: 8 80%; border-left-width: 2px; border-right-width: 2px; border-top-width: 2px; border-bottom-width: 2px; border-left-color: rgb(40, 40, 40); border-right-color: rgb(40, 40, 40); border-top-color: rgb(40, 40, 40); border-bottom-color: rgb(40, 40, 40); align-items: stretch; justify-content: space-around;">
-                <ui:Label text="Others" style="min-width: 70px;" />
-                <ui:Label text="Group" style="min-width: 70px;" />
-                <ui:Label text="All" style="min-width: 70px;" />
-            </ui:VisualElement>
-        </ui:GroupBox>
-        <ui:GroupBox style="flex-direction: row; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; border-left-color: rgb(5, 5, 5); border-right-color: rgb(5, 5, 5); border-top-color: rgb(5, 5, 5); border-bottom-color: rgb(5, 5, 5);">
-            <ui:VisualElement style="flex: 2 20%;" />
-            <ui:VisualElement name="view-choices" style="margin-top: -6px; flex-direction: row; flex: 8 80%; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(40, 40, 40); border-right-color: rgb(40, 40, 40); border-top-color: rgb(40, 40, 40); border-bottom-color: rgb(40, 40, 40); justify-content: space-around;">
-                <ui:RadioButton name="view-others" user-data="Others" class="view-option" style="min-width: 67px;" />
-                <ui:RadioButton name="view-group" user-data="Group" class="view-option" style="min-width: 67px;" />
-                <ui:RadioButton name="view-all" user-data="All" class="view-option" style="min-width: 67px;" />
-            </ui:VisualElement>
-        </ui:GroupBox>
-    </ui:GroupBox>
+    
     <ui:RadioButtonGroup label="Show" value="-1" name="_visibility" choices="Others, Group, All" style="display: none;" />
     <ui:ListView virtualization-method="DynamicHeight" binding-path="_components" show-add-remove-footer="true" show-border="true" show-foldout-header="true" header-title="Components" name="groups" />
     <ui:VisualElement style="flex-grow: 1;" />

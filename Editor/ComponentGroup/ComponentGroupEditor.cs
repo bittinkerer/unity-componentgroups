@@ -32,8 +32,6 @@ namespace Packages.Estenis.ComponentGroupsEditor_
 
         public override VisualElement CreateInspectorGUI()
         {
-            Debug.Log($"Creating Inspector for {Target.GetType().Name}");
-
             // Check if this is a copy-paste from different GO
             if(Target._components.Count > 0)
             {
@@ -50,31 +48,17 @@ namespace Packages.Estenis.ComponentGroupsEditor_
 
             if (Application.isPlaying)
             {
-                _editorAsset = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Packages/com.estenis.componentgroups/Editor/UI/UXML/ComponentGroupUXML.uxml");
-                _componentAsset = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Packages/com.estenis.componentgroups/Editor/UI/UXML/ComponentUXML.uxml");
+                _editorAsset = 
+                    AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(
+                        "Packages/com.estenis.componentgroups/Editor/UI/UXML/ComponentGroupUXML.uxml");
+                _componentAsset = 
+                    AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(
+                        "Packages/com.estenis.componentgroups/Editor/UI/UXML/ComponentUXML.uxml");
             }
 
             var root = _editorAsset.Instantiate();
 
-            // Visibility Radio buttons
-            var visibilityField = root.Q<RadioButtonGroup>("_visibility");
-            visibilityField.value = (int)Target._selectedVisibility;
-            visibilityField.RegisterCallback<ChangeEvent<int>>(ce => HandleVisibilityChange(ce, visibilityField));
-
-            var viewOthersButton = root.Q<RadioButton>("view-others");
-            
-            var viewOptions = root.Query<RadioButton>(className: "view-option").ToList();
-            int i = 0;
-            foreach (var viewOption in viewOptions)
-            {
-                viewOption.userData = i++;
-                viewOption.RegisterCallback<ChangeEvent<bool>>(ce => HandleViewChange(ce, viewOptions));
-            }
-            viewOptions[(int)Target._selectedVisibility].value = true;
-
-            Debug.Log($"Enable view {((ViewMode)visibilityField.value)}");
-
-            // View Dropdown
+            // Set-up View Dropdown
             var ddViewOptions = root.Q<DropdownField>("dd-view-options");
             ddViewOptions.RegisterValueChangedCallback(OnViewOptionsChanged);
 
@@ -102,31 +86,6 @@ namespace Packages.Estenis.ComponentGroupsEditor_
 
             Target._selectedVisibility = Enum.Parse<ViewMode>(evt.newValue.ToUpper());
             View.ShowGOComponents(Target);
-            if (target)
-            {
-                EditorUtility.SetDirty(target);
-            }
-        }
-
-        private void HandleViewChange(ChangeEvent<bool> ce, List<RadioButton> viewOptions)
-        {
-            if(!ce.newValue)
-            {
-                return;
-            }
-
-            var selected = (int)((RadioButton)ce.target).userData;
-            //for (int i = 0; i < viewOptions.Count; i++) 
-            //{ 
-            //    if(i != selected)
-            //    {
-            //        viewOptions[i].value = false;
-            //    }
-            //}
-            
-            Target._selectedVisibility = (ViewMode)selected;
-            View.ShowGOComponents(Target);
-
             if (target)
             {
                 EditorUtility.SetDirty(target);
