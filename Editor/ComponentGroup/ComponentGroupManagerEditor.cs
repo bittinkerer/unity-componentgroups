@@ -11,10 +11,7 @@ namespace Packages.Estenis.ComponentGroupsEditor_
         public VisualTreeAsset _inspectorXML;
         private VisualElement _root;
 
-        private void OnEnable()
-        {
-            Debug.LogWarning($"{nameof(ComponentGroupManagerEditor)}.{nameof(OnEnable)}");
-        }
+        public ComponentGroupManager Target => target as ComponentGroupManager;
 
         public override VisualElement CreateInspectorGUI()
         {
@@ -29,17 +26,16 @@ namespace Packages.Estenis.ComponentGroupsEditor_
             var addGroupButton = _root.Query<Button>("AddGroupButton");
             addGroupButton.First().RegisterCallback<ClickEvent>(OnAddGroup);
 
-            //return inspector;
             return _root;
         }
 
         private void OnAddGroup(ClickEvent evt)
         {
-            UnityEngine.Debug.Log("Clicked Add Group!!");
-            
             // Get text field value 
             var groupName = _root.Q<TextField>("group-name").value;
-            ((ComponentGroupManager)target).AddComponentGroup(groupName);
+            var cg = Target.AddComponentGroup(groupName);
         }
+
+       
     }
 }

@@ -23,18 +23,6 @@ namespace Packages.Estenis.ComponentGroupsEditor_
 
         public ComponentGroup Target => target as ComponentGroup;
 
-        private void OnEnable()
-        {
-             
-            Debug.LogWarning($"OnEnable {nameof(ComponentGroupEditor)}");
-            var foo = ComponentGroupManager.GetByInstanceId(target.GetInstanceID());
-            var goo = targets;
-
-            // try changing the type of target on the fly ...
-            
-            
-        }
-
         //
         // The following types should not be part of a group and should not be changed from group changes
         private string[] _groupExceptions = { "Transform", "ComponentFilter"};
