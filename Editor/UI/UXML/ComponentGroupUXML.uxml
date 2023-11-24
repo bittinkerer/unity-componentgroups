@@ -1,13 +1,11 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
     <ui:VisualElement style="flex-direction: row; margin-bottom: 6px; margin-top: 5px;">
-        <!-- <ui:Label tabindex="-1" binding-path="_typeName" display-tooltip-when-elided="true" name="name" style="flex: 4 40%; -unity-font-style: bold;" /> -->
-        <ui:VisualElement style="flex-direction: row; flex: 4 40%;">
-            <ui:TextField name="group-name" picking-mode="Ignore" label="" style="width: 90%; display: flex;" />
-            <ui:Button text="+" parse-escape-sequences="true" display-tooltip-when-elided="true" name="AddGroupButton" />
+        <ui:VisualElement style="flex-direction: row; flex: 4 40%; margin-right: 60px;">
+            <ui:TextField name="group-name" picking-mode="Ignore" readonly="true" text="agfgfg" style="width: 90%; display: flex; -unity-font-style: bold; -unity-font: url(&apos;project://database/Packages/com.estenis.componentgroups/Editor/Assets/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&amp;guid=1bcf49af68d6c884a9e0c5d9101c183a&amp;type=3#NotInter-Regular&apos;); font-size: 13px; background-color: rgba(36, 35, 35, 255); -unity-text-outline-color: rgba(0, 0, 0, 0);" />
+            <ui:Button text="+" parse-escape-sequences="true" display-tooltip-when-elided="true" name="SetGroupName" style="margin-left: -2px; background-image: url(&apos;project://database/Packages/com.unity.componentgroups/Editor/Icons/d_Add%20Binding@3x.png?fileID=2800000&amp;guid=ca933a91c81734ddd88b17c8481ec1e9&amp;type=3#d_Add Binding@3x&apos;);" />
         </ui:VisualElement>
-        <ui:DropdownField name="dd-view-options" index="-1" choices="OTHERS, GROUP, ALL" binding-path="_selectedVisibility" style="flex: 3 30%; " />
+        <ui:DropdownField name="dd-view-options" index="-1" choices="OTHERS, GROUP, ALL" binding-path="_selectedVisibility" style="flex: 3 30%;" />
     </ui:VisualElement>
-    
     <ui:RadioButtonGroup label="Show" value="-1" name="_visibility" choices="Others, Group, All" style="display: none;" />
     <ui:ListView virtualization-method="DynamicHeight" binding-path="_components" show-add-remove-footer="true" show-border="true" show-foldout-header="true" header-title="Components" name="groups" />
     <ui:VisualElement style="flex-grow: 1;" />

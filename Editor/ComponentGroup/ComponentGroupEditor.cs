@@ -62,7 +62,7 @@ namespace Packages.Estenis.ComponentGroupsEditor_
             var ddViewOptions = root.Q<DropdownField>("dd-view-options");
             ddViewOptions.RegisterValueChangedCallback(OnViewOptionsChanged);
 
-            // Set up groups
+            // Set up group components
             var groupsListView = root.Q<ListView>();
             groupsListView.itemsSource = Target._components;
 
@@ -222,22 +222,21 @@ namespace Packages.Estenis.ComponentGroupsEditor_
 
         private void OnComponentChanged(ChangeEvent<UnityEngine.Object> evt)
         {
-            Debug.Log($"[{Time.time}] {nameof(OnComponentChanged)}");
+            
         }
 
         private void GroupsListView_itemsSourceChanged()
         {
-            Debug.Log("[{Time.time}] Items Source changed.");
+            
         }
 
         private void GroupsListView_itemIndexChanged(int arg1, int arg2)
         {
-            Debug.Log($"[{Time.time}] Item index changed");
+            
         }
 
         private void GroupsListView_itemsAdded(System.Collections.Generic.IEnumerable<int> addedItems)
         {
-            Debug.Log($"[{Time.time}] Groups item added:  {string.Join(',', addedItems.ToArray())}");
             foreach (var index in addedItems)
             {
                 Target._components[index] = new ComponentData();
@@ -248,18 +247,8 @@ namespace Packages.Estenis.ComponentGroupsEditor_
         // Will bind to UI from backend data
         private void OnGroupsItemBound(VisualElement element, int index)
         {
-            Debug.Log($"[{Time.time}] Groups item bound");
             var componentField = element.Q<ObjectField>();
-
-            if (componentField?.value)
-            {                
-                Debug.Log($"[{Time.time}] Groups item Unbound for {componentField.value.name}");
-            }
-            else
-            {
-                Debug.Log($"[{Time.time}] Groups item Unbound for null component");
-            }
-
+            
             componentField.userData = index;    // order matter, this statement needs to happen before assignment of value
             componentField.value = Target._components[index]._component;
             
@@ -273,16 +262,7 @@ namespace Packages.Estenis.ComponentGroupsEditor_
         /// <param name="index"></param>
         private void OnGroupsItemUnBound(VisualElement element, int index)
         {
-            var component = (Component)element.Q<ObjectField>()?.value;
-            if (component)
-            {
-                Debug.Log($"[{Time.time}] Groups item Unbound for {component.name}");
-                // @TODO: Should update Target._components ??
-            }
-            else
-            {
-                Debug.Log($"[{Time.time}] Groups item Unbound for null component");
-            }
+            
         }
 
     }
