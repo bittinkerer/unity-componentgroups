@@ -41,7 +41,6 @@ namespace Packages.Estenis.ComponentGroupsEditor_
 
             // Keep track of copy for changes detected to components list
             OnUpdate();
-            //Target._componentsCopy = new(Target._components);
 
             // Set up update loop
             EditorApplication.update += OnUpdate;
@@ -62,6 +61,12 @@ namespace Packages.Estenis.ComponentGroupsEditor_
             var ddViewOptions = root.Q<DropdownField>("dd-view-options");
             ddViewOptions.RegisterValueChangedCallback(OnViewOptionsChanged);
 
+            // Set up Name-Set and Name-Unlock Button events
+            var setNameBtn = root.Q<UnityEngine.UIElements.Button>("SetGroupName");
+            setNameBtn.clicked += () => SetNameBtn_clicked(root);
+            var unlockNameBtn = root.Q<UnityEngine.UIElements.Button>("UnlockGroupName");
+            unlockNameBtn.clicked += () => UnlockNameBtn_clicked(root);
+
             // Set up group components
             var groupsListView = root.Q<ListView>();
             groupsListView.itemsSource = Target._components;
@@ -78,6 +83,26 @@ namespace Packages.Estenis.ComponentGroupsEditor_
             // Set up focus
 
             return root;
+        }
+
+        private void UnlockNameBtn_clicked(TemplateContainer root)
+        {
+            var setNameBtn = root.Q<UnityEngine.UIElements.Button>("SetGroupName");
+            var unlockNameBtn = root.Q<UnityEngine.UIElements.Button>("UnlockGroupName");
+            var nameTxt = root.Q<TextField>("group-name");
+            nameTxt.isReadOnly = true;
+            setNameBtn.style.display = DisplayStyle.Flex;
+            unlockNameBtn.style.display = DisplayStyle.None;
+        }
+
+        private void SetNameBtn_clicked(TemplateContainer root)
+        {
+            var setNameBtn = root.Q<UnityEngine.UIElements.Button>("SetGroupName");
+            var unlockNameBtn = root.Q<UnityEngine.UIElements.Button>("UnlockGroupName");
+            var nameTxt = root.Q<TextField>("group-name");
+            nameTxt.isReadOnly = false;
+            setNameBtn.style.display = DisplayStyle.None;
+            unlockNameBtn.style.display = DisplayStyle.Flex;
         }
 
         private void OnViewOptionsChanged(ChangeEvent<string> evt)
