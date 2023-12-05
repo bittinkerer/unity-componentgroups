@@ -137,7 +137,10 @@ namespace Packages.Estenis.ComponentGroupsEditor_
 
                 foreach (var prop in newComponent.GetType().GetProperties(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public).Where(p => p.Module.Name != "UnityEngine.CoreModule.dll"))
                 {
-                    prop.SetValue(newComponent, prop.GetValue(component._component));
+                    if (prop.GetSetMethod() != null)
+                    {
+                        prop.SetValue(newComponent, prop.GetValue(component._component));
+                    }
                 }
 
                 // update reference
