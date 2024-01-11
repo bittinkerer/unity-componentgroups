@@ -3,12 +3,10 @@ using Packages.Estenis.UnityExts_;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.NetworkInformation;
 using System.Reflection;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.UIElements;
 
 namespace Packages.Estenis.ComponentGroupsEditor_
@@ -39,11 +37,13 @@ namespace Packages.Estenis.ComponentGroupsEditor_
                 CreateComponentsInGO(componentsInTargetNotInGO);
             }
 
+            // @CONSIDER: Multiple ComponentGroups will interfere with each other, other components may control
+            //  visibility in different ways, so to keep it simple, have a refresh button to update visibility
             // Keep track of copy for changes detected to components list
-            OnUpdate();
+            //OnUpdate();
 
             // Set up update loop
-            EditorApplication.update += OnUpdate;
+            //EditorApplication.update += OnUpdate;
 
             if (Application.isPlaying)
             {
@@ -66,6 +66,8 @@ namespace Packages.Estenis.ComponentGroupsEditor_
             setNameBtn.clicked += () => SetNameBtn_clicked(root);
             var unlockNameBtn = root.Q<UnityEngine.UIElements.Button>("UnlockGroupName");
             unlockNameBtn.clicked += () => UnlockNameBtn_clicked(root);
+            var refreshBtn = root.Q<Button>("refresh");
+            refreshBtn.clicked += () => RefreshView_clicked(root);
 
             // Set up group components
             var groupsListView = root.Q<ListView>();
@@ -83,6 +85,11 @@ namespace Packages.Estenis.ComponentGroupsEditor_
             // Set up focus
 
             return root;
+        }
+
+        private void RefreshView_clicked(TemplateContainer root)
+        {
+
         }
 
         private void UnlockNameBtn_clicked(TemplateContainer root)
