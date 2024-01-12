@@ -37,14 +37,6 @@ namespace Packages.Estenis.ComponentGroupsEditor_
                 CreateComponentsInGO(componentsInTargetNotInGO);
             }
 
-            // @CONSIDER: Multiple ComponentGroups will interfere with each other, other components may control
-            //  visibility in different ways, so to keep it simple, have a refresh button to update visibility
-            // Keep track of copy for changes detected to components list
-            //OnUpdate();
-
-            // Set up update loop
-            //EditorApplication.update += OnUpdate;
-
             if (Application.isPlaying)
             {
                 _editorAsset = 
@@ -89,7 +81,11 @@ namespace Packages.Estenis.ComponentGroupsEditor_
 
         private void RefreshView_clicked(TemplateContainer root)
         {
-
+            View.ShowGOComponents(Target);
+            if (target)
+            {
+                EditorUtility.SetDirty(target);
+            }
         }
 
         private void UnlockNameBtn_clicked(TemplateContainer root)
