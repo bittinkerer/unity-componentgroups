@@ -2,6 +2,7 @@ using UnityEditor;
 
 namespace Packages.Estenis.ComponentGroups_
 {
+#if UNITY_EDITOR
     [InitializeOnLoad]
     public static class Startup
     {
@@ -13,4 +14,5 @@ namespace Packages.Estenis.ComponentGroups_
             }
         }
     }
+#endif
 }

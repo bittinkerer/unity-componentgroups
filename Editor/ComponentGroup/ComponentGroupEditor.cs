@@ -111,7 +111,7 @@ namespace Packages.Estenis.ComponentGroupsEditor_
         private void OnViewOptionsChanged(ChangeEvent<string> evt)
         {
             if (evt.previousValue == evt.newValue) return;
-
+            Debug.Log($"{Target.TypeName}.{nameof(OnViewOptionsChanged)}");
             Target._selectedVisibility = Enum.Parse<ViewMode>(evt.newValue.ToUpper());
             View.ShowGOComponents(Target);
             if (target)
@@ -161,7 +161,7 @@ namespace Packages.Estenis.ComponentGroupsEditor_
             {
                 return;
             }
-
+            Debug.Log($"{Target.TypeName}.{nameof(HandleVisibilityChange)}");
             Target._selectedVisibility = (ViewMode)changeEvent.newValue;
             View.ShowGOComponents(Target);
 
@@ -268,6 +268,7 @@ namespace Packages.Estenis.ComponentGroupsEditor_
 
         private void GroupsListView_itemsAdded(System.Collections.Generic.IEnumerable<int> addedItems)
         {
+            Debug.Log($"{Target.TypeName}.{nameof(GroupsListView_itemsAdded)}");
             foreach (var index in addedItems)
             {
                 Target._components[index] = new ComponentData();
@@ -278,6 +279,7 @@ namespace Packages.Estenis.ComponentGroupsEditor_
         // Will bind to UI from backend data
         private void OnGroupsItemBound(VisualElement element, int index)
         {
+            Debug.Log($"{Target.TypeName}.{nameof(OnGroupsItemBound)}");
             var componentField = element.Q<ObjectField>();
             
             componentField.userData = index;    // order matter, this statement needs to happen before assignment of value

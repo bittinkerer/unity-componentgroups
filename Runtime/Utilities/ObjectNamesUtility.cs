@@ -31,40 +31,5 @@ namespace Packages.Estenis.ComponentGroups_
             titlesCache.Add(type, title);
         }
 
-        //
-        // For Components 
-        public static string GetObjectTypeNameModified(UnityEngine.Object o)
-        {
-            
-
-            Debug.Log($"Running : {nameof(GetObjectTypeNameModified)}");
-            return "TEST";
-
-            //if (o == null)
-            //{
-            //    Debug.LogError($"{nameof(ObjectNamesUtility)}.{nameof(GetObjectTypeNameModified)} Error: Parameter, {nameof(o)} cannot be null.");
-            //    return "SOMETHING_WENT_WRONG";
-            //}
-
-            //var getObjectTypeNameMethodInfo = typeof(ObjectNames).GetMethod(
-            //    "GetObjectTypeName",
-            //     BindingFlags.NonPublic | BindingFlags.Static, 
-            //     null, 
-            //     new Type[] { typeof(UnityEngine.Object), typeof(bool) },
-            //     null);
-            //if(getObjectTypeNameMethodInfo == null)
-            //{
-            //    Debug.LogError($"{nameof(ObjectNamesUtility)}.{nameof(GetObjectTypeNameModified)} Error: Could not get method for {nameof(ObjectNames)}.GetObjectTypeName.");
-            //    return "SOMETHING_WENT_WRONG";
-            //}
-
-            //var getObjectTypeNameFunc = 
-            //    (Func<UnityEngine.Object, bool, string>)Delegate.CreateDelegate(
-            //        typeof(Func<UnityEngine.Object, bool, string>), 
-            //        getObjectTypeNameMethodInfo);
-            //return getObjectTypeNameFunc(o, multiObjectEditing);
-
-            
-        }
     }
 }
